@@ -21,7 +21,7 @@ pipeline {
 
         stage("Checkout from SCM") {
             steps {
-                git branch: 'main', credentialId: 'github', url: 'https://github.com/hkalsait/jenkins-docker-k8s'
+                git branch: 'main', credentialsId: 'github', url: 'https://github.com/hkalsait/jenkins-docker-k8s'
                 echo "Checking out our SCM code from above repository..."
             }
         }
