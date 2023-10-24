@@ -8,13 +8,14 @@ pipeline {
         jdk 'Java17'
         maven 'Maven3'
     }
-    /*stages {
+    stages {
 
         stage("Build") {
+            echo "Building the app..."
             
         }
 
-        stage("Test") {
+       /* stage("Test") {
 
         }
     }
