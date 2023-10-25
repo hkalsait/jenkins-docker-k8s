@@ -110,7 +110,10 @@ pipeline {
             steps {
                 script {
                     echo "Triggering CD pipeline"
-                    sh "curl -v -k --user great-success:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-54-173-106-113.compute-1.amazonaws.com:8080/job/CD-pipeline-gitops-myapp/buildWithParameters?token=gitops-token'"
+                    sh "curl -v -k --user great-success:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-54-173-106-113.compute-1.amazonaws.com:8080/job/gitops-app-pipeline/buildWithParameters?token=gitops-token'"
+                    echo "Triggered CD pipeline inJenkins and you can check your ArgoCD dashboard, You application URL, status od K8s Pods and service..."
+                    echo "Also your new build Image with new tag check in Docker as well as ArgoCD"
+                    echo "...Thanks for choosing me..."
                 }
             }
         }
