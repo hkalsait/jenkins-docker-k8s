@@ -95,6 +95,7 @@ pipeline {
                 script {
                     sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
                     sh "docker rmi ${IMAGE_NAME}:latest"
+                    echo "Artifact Cleanedup"
                 }
             }
         }
@@ -102,6 +103,7 @@ pipeline {
         stage("Trigger CD Pipeline") {
             steps {
                 script {
+                    echo "Triggering CD pipeline"
                     sh "curl -v -k --user great-success:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-52-87-210-166.compute-1.amazonaws.com:8080/job/gitops-app-pipeline/buildWithParameters?token=gitops-token'"
                 }
             }
