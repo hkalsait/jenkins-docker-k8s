@@ -24,8 +24,9 @@ pipeline {
 
         stage("Cleanup Workspace") {
             steps {
-            echo "Cleaning up workspace..."
+            echo "Cleaning up workspace...wait for a sometimes..."
             cleanWs()
+            echo "WOW...Workspace Cleaned Up..."
             }
             
         }
@@ -33,13 +34,14 @@ pipeline {
         stage("Checkout from SCM") {
             steps {
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/hkalsait/jenkins-docker-k8s'
-                echo "Checking out our SCM code from above repository..."
+                echo "...Checking out our SCM code from above repository..."
             }
         }
 
         stage("Build Application") {
             steps{
                 sh "mvn clean package"
+                echo "...Our Application Build Successfully..."
             }
 
         }
@@ -47,6 +49,7 @@ pipeline {
         stage("Test Application") {
             steps{
                 sh "mvn test"
+                echo "...Our Application Testing Done Successfully..."
             }
         }
 
@@ -55,6 +58,7 @@ pipeline {
                     script {
                         withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token'){
                             sh "mvn sonar:sonar"
+                            echo "...SonarQube Analysis Done..."
                         }
                     }
                 }
@@ -72,10 +76,12 @@ pipeline {
                 script {
                     docker.withRegistry('',DOCKER_PASS) {
                         docker_image = docker.build "${IMAGE_NAME}"
+                        echo "Great! Docker Image Build Successfully. Please check on dockerhub"
                     }
                     docker.withRegistry('',DOCKER_PASS) {
                         docker_image.push("${IMAGE_TAG}")
                         docker_image.push('latest')
+                        echo "${DOCKER_USER} your docker Image has been pushed Successfully to dockerhub..."
                     }
                 }
             }
@@ -95,7 +101,7 @@ pipeline {
                 script {
                     sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
                     sh "docker rmi ${IMAGE_NAME}:latest"
-                    echo "Artifact Cleanedup"
+                    echo "Artifact Cleanedup Succesfully"
                 }
             }
         }
