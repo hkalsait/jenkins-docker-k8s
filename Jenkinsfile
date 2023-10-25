@@ -25,9 +25,9 @@ pipeline {
 
         stage("Cleanup Workspace") {
             steps {
-            echo "Cleaning up workspace...wait for a sometimes..."
+            //echo "Cleaning up workspace...wait for a sometimes..."
             cleanWs()
-            echo "WOW...Workspace Cleaned Up..."
+            //echo "WOW...Workspace Cleaned Up..."
             }
             
         }
@@ -35,14 +35,14 @@ pipeline {
         stage("Checkout from SCM") {
             steps {
                 git branch: 'main', credentialsId: 'github', url: 'https://github.com/hkalsait/jenkins-docker-k8s'
-                echo "...Checking out our SCM code from above repository..."
+                //echo "...Checking out our SCM code from above repository..."
             }
         }
 
         stage("Build Application") {
             steps{
                 sh "mvn clean package"
-                echo "...Our Application Build Successfully..."
+                //echo "...Our Application Build Successfully..."
             }
 
         }
@@ -50,7 +50,7 @@ pipeline {
         stage("Test Application") {
             steps{
                 sh "mvn test"
-                echo "...Our Application Testing Done Successfully..."
+                //echo "...Our Application Testing Done Successfully..."
             }
         }
 
@@ -59,7 +59,7 @@ pipeline {
                     script {
                         withSonarQubeEnv(credentialsId: 'jenkins-sonarqube-token'){
                             sh "mvn sonar:sonar"
-                            echo "...SonarQube Analysis Done..."
+                            //echo "...SonarQube Analysis Done..."
                         }
                     }
                 }
@@ -77,12 +77,12 @@ pipeline {
                 script {
                     docker.withRegistry('',DOCKER_PASS) {
                         docker_image = docker.build "${IMAGE_NAME}"
-                        echo "Great! Docker Image Build Successfully. Please check on dockerhub"
+                        //echo "Great! Docker Image Build Successfully. Please check on dockerhub"
                     }
                     docker.withRegistry('',DOCKER_PASS) {
                         docker_image.push("${IMAGE_TAG}")
                         docker_image.push('latest')
-                        echo "${DOCKER_USER} your docker Image has been pushed Successfully to dockerhub..."
+                        //echo "${DOCKER_USER} your docker Image has been pushed Successfully to dockerhub..."
                     }
                 }
             }
@@ -101,7 +101,7 @@ pipeline {
                 script {
                     sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
                     sh "docker rmi ${IMAGE_NAME}:latest"
-                    echo "Artifact Cleanedup Succesfully"
+                    //echo "Artifact Cleanedup Succesfully"
                 }
             }
         }
@@ -109,11 +109,11 @@ pipeline {
         stage("Trigger CD Pipeline") {
             steps {
                 script {
-                    echo "Triggering CD pipeline"
+                    //echo "Triggering CD pipeline"
                     sh "curl -v -k --user great-success:${JENKINS_API_TOKEN} -X POST -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' --data 'IMAGE_TAG=${IMAGE_TAG}' 'ec2-54-173-106-113.compute-1.amazonaws.com:8080/job/gitops-cd-pipeline/buildWithParameters?token=gitops-token'"
-                    echo "Triggered CD pipeline inJenkins and you can check your ArgoCD dashboard, You application URL, status od K8s Pods and service..."
-                    echo "Also your new build Image with new tag check in Docker as well as ArgoCD"
-                    echo "...Thanks for choosing me..."
+                    //echo "Triggered CD pipeline inJenkins and you can check your ArgoCD dashboard, You application URL, status od K8s Pods and service..."
+                    //echo "Also your new build Image with new tag check in Docker as well as ArgoCD"
+                    //echo "...Thanks for choosing me..."
                 }
             }
         }
