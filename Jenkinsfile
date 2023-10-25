@@ -81,7 +81,7 @@ pipeline {
                     docker.withRegistry('',DOCKER_PASS) {
                         docker_image.push("${IMAGE_TAG}")
                         docker_image.push('latest')
-                        echo "${DOCKER_USER} your docker Image has been pushed Successfully to dockerhub..."
+                        echo "${DOCKER_USER} your docker Image has been pushed Successfully to the dockerhub..."
                     }
                 }
             }
